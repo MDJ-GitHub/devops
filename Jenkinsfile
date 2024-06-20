@@ -29,8 +29,11 @@ pipeline {
 
         stage('3/3 Deploy to Minikube') {
             steps {
-                script {
-                    bat 'kubectl apply -f deployment.yaml'
+				script {
+                    bat '''
+                        kubectl config use-context minikube
+                        kubectl apply -f deployment.yaml --as=system:serviceaccount:default:jenkins-sa
+                    '''
                 }
             }
         }
