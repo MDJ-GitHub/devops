@@ -38,8 +38,8 @@ pipeline {
                     env.TIMESTAMP = "${timestamp}" // Store the timestamp in an environment variable
                     bat 'kubectl config use-context minikube'
 					bat 'kubectl apply -f Kubernetesfile.yaml'
-                    bat "kubectl set image deployment/devops-deployment devops=%DOCKER_IMAGE% --record"
-                    bat "kubectl patch deployment devops-deployment -p \"{\\\"spec\\\":{\\\"template\\\":{\\\"metadata\\\":{\\\"annotations\\\":{\\\"timestamp\\\":\\\"%TIMESTAMP%\\\"}}}}}\""
+                    bat 'kubectl set image deployment/devops-deployment devops=%DOCKER_IMAGE%'
+                    bat 'kubectl patch deployment devops-deployment -p \"{\\\"spec\\\":{\\\"template\\\":{\\\"metadata\\\":{\\\"annotations\\\":{\\\"timestamp\\\":\\\"%TIMESTAMP%\\\"}}}}}\"'
                     bat 'kubectl rollout status deployment/devops-deployment'
               
                 }
