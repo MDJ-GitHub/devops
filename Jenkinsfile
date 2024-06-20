@@ -34,11 +34,14 @@ pipeline {
         stage('3/3 Deploy to Minikube') {
             steps {
 				script {
-                    bat '''
-                        kubectl config use-context minikube
-                        kubectl apply -f Kubernetesfile.yaml
-						kubectl set image deployment/devops-deployment devops=mdjdocker/devops:latest
-                    '''
+					def timestamp = System.currentTimeMillis()
+                    env.TIMESTAMP = "${timestamp}" // Store the timestamp in an environment variable
+                    bat 'kubectl config use-context minikube'
+					bat 'kubectl apply -f Kubernetesfile.yaml'
+                    bat "kubectl set image deployment/devops-deployment devops=%DOCKER_IMAGE% --record"
+                    bat "kubectl patch deployment devops-deployment -p \"{\\\"spec\\\":{\\\"template\\\":{\\\"metadata\\\":{\\\"annotations\\\":{\\\"timestamp\\\":\\\"%TIMESTAMP%\\\"}}}}}\""
+                    bat 'kubectl rollout status deployment/devops-deployment'
+              
                 }
             }
         }
