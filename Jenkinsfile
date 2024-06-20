@@ -36,7 +36,7 @@ pipeline {
                     bat '''
                         kubectl config use-context minikube
                         kubectl apply -f deployment.yaml
-						kubectl set image deployment/devops-deployment devops=mdjdocker/devops:latest
+						kubectl set image deployment/devops-deployment devops=env.DOCKER_IMAGE
                     '''
                 }
             }
