@@ -1,40 +1,37 @@
 pipeline {
     agent any
-	
-	triggers {
-        pollSCM('* * * * *')
+
+    environment {
+        DOCKER_HUB_CREDENTIALS = 'dockerhub-credentials' // Jenkins credentials ID for DockerHub
     }
-	
+
+    triggers {
+        pollSCM('* * * * *') // Poll GitHub every minute
+    }
+
     stages {
-	
-        stage('Clone Repository') {
+        stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/MDJ-GitHub/devops.git'
+                git 'https://github.com/mdj-github/devops.git'
             }
         }
-		
+
         stage('Build Docker Image') {
             steps {
                 script {
-                    dockerImage = docker.build("mdjdocker/devops")
-                }
-            }
-        }
-		
-        stage('Push Docker Image') {
-            steps {
-                script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'dockerCreds') {
-                        dockerImage.push("latest")
+                    docker.withRegistry('https://registry.hub.docker.com', DOCKER_HUB_CREDENTIALS) {
+                        def dockerImage = docker.build('mdjdocker/devops:latest', '.')
+                        dockerImage.push()
                     }
                 }
             }
         }
-		
-		stage('Deploy to Minikube') {
+
+        stage('Deploy to Minikube') {
             steps {
                 script {
-                    sh 'kubectl apply -f deployment.yaml'
+                    // For Windows, use 'kubectl apply' directly without 'nohup'
+                    bat 'kubectl apply -f deployment.yaml'
                 }
             }
         }
