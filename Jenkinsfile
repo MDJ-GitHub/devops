@@ -34,6 +34,7 @@ pipeline {
                     bat '''
                         kubectl config use-context minikube
                         kubectl apply -f deployment.yaml --as=system:serviceaccount:default:jenkins-sa
+						kubectl set image deployment/devops-deployment devops=${imageName}
                     '''
                 }
             }
