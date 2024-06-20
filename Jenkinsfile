@@ -4,8 +4,8 @@ pipeline {
     environment {
         DOCKER_HUB_CREDENTIALS = 'dockerCreds'
         KUBECONFIG = 'C:\\Users\\MDJMi\\.kube\\config'
-		DOCKER_IMAGE = 'mdjdocker/devops:latest'
-		GITHUB_REPO = 'https://github.com/MDJ-GitHub/devops.git'
+		DOCKER_IMAGE = 'mdjdocker/devops:latest' // KUBECTL DOES NOT USE VAIRABLES, CHANGE IT MANUALLY THERE.
+		GITHUB_REPO = 'https://github.com/MDJ-GitHub/devops.git' 
     }
 
     triggers {
@@ -36,7 +36,7 @@ pipeline {
                     bat '''
                         kubectl config use-context minikube
                         kubectl apply -f deployment.yaml
-						kubectl set image deployment/devops-deployment devops=env.DOCKER_IMAGE
+						kubectl set image deployment/devops-deployment devops=mdjdocker/devops:latest
                     '''
                 }
             }
