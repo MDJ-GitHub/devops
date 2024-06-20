@@ -4,6 +4,8 @@ pipeline {
     environment {
         DOCKER_HUB_CREDENTIALS = 'dockerCreds'
         KUBECONFIG = 'C:\\Users\\MDJMi\\.kube\\config'
+		DOCKER_IMAGE = 'mdjdocker/devops:latest'
+		GITHUB_REPO = 'https://github.com/MDJ-GitHub/devops.git'
     }
 
     triggers {
@@ -13,7 +15,7 @@ pipeline {
     stages {
         stage('1/3 Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/MDJ-GitHub/devops.git'
+                git branch: 'main', url: GITHUB_REPO
             }
         }
 
@@ -21,7 +23,7 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://registry.hub.docker.com', DOCKER_HUB_CREDENTIALS) {
-                        def dockerImage = docker.build('mdjdocker/devops:latest', '.')
+                        def dockerImage = docker.build(DOCKER_IMAGE, '.')
                         dockerImage.push()
                     }
                 }
@@ -33,8 +35,8 @@ pipeline {
 				script {
                     bat '''
                         kubectl config use-context minikube
-                        kubectl apply -f deployment.yaml --as=system:serviceaccount:default:jenkins-sa
-						kubectl set image deployment/devops-deployment devops=${imageName}
+                        kubectl apply -f deployment.yaml
+						kubectl set image deployment/devops-deployment devops=${DOCKER_IMAGE}
                     '''
                 }
             }
