@@ -25,6 +25,7 @@ pipeline {
                     docker.withRegistry('https://registry.hub.docker.com', DOCKER_HUB_CREDENTIALS) {
                         def dockerImage = docker.build(DOCKER_IMAGE, '.')
                         dockerImage.push()
+						docker.image(DOCKER_IMAGE).pull()
                     }
                 }
             }
