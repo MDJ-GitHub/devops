@@ -30,8 +30,7 @@ pipeline {
         stage('3/3 Deploy to Minikube') {
             steps {
                 script {
-                    // For Windows, use 'kubectl apply' directly without 'nohup'
-                    bat 'kubectl apply -f deployment.yaml'
+                    bat 'minikube kubectl -- apply -f deployment.yaml'
                 }
             }
         }
