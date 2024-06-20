@@ -30,7 +30,7 @@ pipeline {
         stage('3/3 Deploy to Minikube') {
             steps {
                 script {
-                    bat 'kubectl auth can-i apply -f deployment.yaml --as=system:serviceaccount:default:mdjjenkins'
+                    bat 'kubectl apply -f deployment.yaml'
                 }
             }
         }
