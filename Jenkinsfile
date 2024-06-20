@@ -16,7 +16,7 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'MDJ.PassWoRd-09890762-rekcod/2021') {
+                    docker.withRegistry('https://registry.hub.docker.com', 'dockerCreds') {
                         dockerImage.push("latest")
                     }
                 }
