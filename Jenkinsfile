@@ -30,7 +30,7 @@ pipeline {
         stage('3/3 Deploy to Minikube') {
             steps {
                 script {
-                    bat 'minikube kubectl -- apply -f deployment.yaml'
+                    bat 'kubectl apply -f deployment.yaml'
                 }
             }
         }
