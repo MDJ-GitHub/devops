@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git 'https://github.com/MDJ-GitHub/devops.git'
+                git branch: 'main', url: 'https://github.com/MDJ-GitHub/devops.git'
             }
         }
         stage('Build Docker Image') {
