@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         DOCKER_HUB_CREDENTIALS = 'dockerCreds'
+        KUBECONFIG = 'C:\\Users\\MDJMi\\.kube\\config'
     }
 
     triggers {
